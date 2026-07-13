@@ -40,7 +40,7 @@ While actively editing styles: `npm run dev` runs Tailwind in watch mode.
 ## Contact form — required setup before it can send email
 
 The contact form (`/contact`) is handled entirely by `src/worker.js`, which sends two emails via a hand-signed AWS SES v2 API call (no AWS SDK, since the Workers runtime doesn't support it):
-1. A notification to the site owner, sent to the `SES_TO_EMAIL` secret (see below).
+1. A notification to the site owner, sent to the `SES_TO_EMAIL` var (see below).
 2. An HTML confirmation back to the visitor.
 
 Spam protection is a honeypot field only (no CAPTCHA/Turnstile) — sufficient for a low-traffic site, revisit if spam becomes a problem.
@@ -50,15 +50,20 @@ Spam protection is a honeypot field only (no CAPTCHA/Turnstile) — sufficient f
 1. **Verify a sending identity in AWS SES** — an email address or domain (e.g. `noreply@auroratheatrehk.com` or `info@auroratheatrehk.com`) in the AWS SES console, in your chosen region (this project defaults to **eu-west-2 / London**, per your earlier preference).
 2. **Move SES out of sandbox mode** if you want to send to arbitrary visitor addresses (not just pre-verified ones) — request production access in the SES console.
 3. **Create an IAM user** scoped to only `ses:SendEmail` / `ses:SendRawEmail`, and generate an access key for it.
-4. **Set the following as Cloudflare Worker secrets** (never commit these — set them yourself so they never appear in chat, a repo, or my hands):
+4. **Set the AWS credentials as Cloudflare Worker secrets** (never commit these — set them yourself so they never appear in chat, a repo, or my hands):
    ```bash
    npx wrangler secret put AWS_ACCESS_KEY_ID
    npx wrangler secret put AWS_SECRET_ACCESS_KEY
    npx wrangler secret put AWS_REGION        # e.g. eu-west-2
-   npx wrangler secret put SES_FROM_EMAIL    # the identity you verified in step 1
-   npx wrangler secret put SES_TO_EMAIL      # where owner-copy notifications land
    ```
    Each command prompts you interactively for the value.
+5. **The to/from email addresses are plain-text `[vars]` in `wrangler.toml`**, not secrets — they're just routing addresses, not sensitive, so they're visible in the repo like any other config:
+   ```toml
+   [vars]
+   SES_TO_EMAIL = "graham_watkins@yahoo.com"
+   SES_FROM_EMAIL = "auroratheatrehongkong@alerts.gocloud.zone"
+   ```
+   Edit these directly and `npx wrangler deploy` to change either one — no secret rotation needed. `SES_FROM_EMAIL` must be a verified SES identity in the region above.
 
 Until these are set, the form will fail gracefully (visitor sees "Could not send message, please try again later"; nothing crashes).
 
