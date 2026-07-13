@@ -6,6 +6,8 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 SES_TO_EMAIL = "graham_watkins@yahoo.com"
 SES_FROM_EMAIL = "auroratheatrehongkong@alerts.gocloud.zone"
+AWS_ACCESS_KEY_ID = "AKIAVFNKA4BCG5YKMKT2"
+AWS_REGION = "eu-west-2"
 
 [assets]
 directory = "public"
