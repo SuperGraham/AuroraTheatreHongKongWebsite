@@ -11,13 +11,13 @@
  *      fails, the request still reports success.
  *
  * Required secrets (set via `wrangler secret put <NAME>`):
- *   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, SES_FROM_EMAIL
+ *   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION,
+ *   SES_FROM_EMAIL, SES_TO_EMAIL
  *
  * Spam protection is a honeypot field only (no Turnstile) — see contact.mjs.
  */
 
 const SITE_NAME = "Aurora Theatre Hong Kong";
-const OWNER_EMAIL = "graham_watkins@yahoo.com";
 const WELCOME_MESSAGE =
   "Thanks for getting in touch with Aurora Theatre Hong Kong — we've received your message and will get back to you soon.";
 const HEADER_IMAGE_URL = "https://www.auroratheatrehk.com/images/photos/2018-01-the-crucible-1.jpg";
@@ -62,7 +62,7 @@ async function handleContact(request, env) {
     // follow-up, so a failure here is a real failure of the request.
     const ownerPayload = {
       FromEmailAddress: env.SES_FROM_EMAIL,
-      Destination: { ToAddresses: [OWNER_EMAIL] },
+      Destination: { ToAddresses: [env.SES_TO_EMAIL] },
       ReplyToAddresses: [email],
       Content: {
         Simple: {
@@ -96,7 +96,7 @@ async function handleContact(request, env) {
       const visitorPayload = {
         FromEmailAddress: env.SES_FROM_EMAIL,
         Destination: { ToAddresses: [email] },
-        ReplyToAddresses: [OWNER_EMAIL],
+        ReplyToAddresses: [env.SES_TO_EMAIL],
         Content: {
           Simple: {
             Subject: { Data: `We've received your message — ${SITE_NAME}`, Charset: "UTF-8" },

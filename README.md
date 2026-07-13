@@ -40,7 +40,7 @@ While actively editing styles: `npm run dev` runs Tailwind in watch mode.
 ## Contact form — required setup before it can send email
 
 The contact form (`/contact`) is handled entirely by `src/worker.js`, which sends two emails via a hand-signed AWS SES v2 API call (no AWS SDK, since the Workers runtime doesn't support it):
-1. A notification to the site owner (hardcoded to **graham_watkins@yahoo.com** in `src/worker.js` — change the `OWNER_EMAIL` constant there if this should go elsewhere).
+1. A notification to the site owner, sent to the `SES_TO_EMAIL` secret (see below).
 2. An HTML confirmation back to the visitor.
 
 Spam protection is a honeypot field only (no CAPTCHA/Turnstile) — sufficient for a low-traffic site, revisit if spam becomes a problem.
@@ -56,6 +56,7 @@ Spam protection is a honeypot field only (no CAPTCHA/Turnstile) — sufficient f
    npx wrangler secret put AWS_SECRET_ACCESS_KEY
    npx wrangler secret put AWS_REGION        # e.g. eu-west-2
    npx wrangler secret put SES_FROM_EMAIL    # the identity you verified in step 1
+   npx wrangler secret put SES_TO_EMAIL      # where owner-copy notifications land
    ```
    Each command prompts you interactively for the value.
 
