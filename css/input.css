@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/inter.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/playfair-display.woff2") format("woff2");
+}
+
+@theme {
+  --color-ink: #15100c;
+  --color-charcoal: #211a16;
+  --color-charcoal-light: #2f2620;
+  --color-cream: #faf6ee;
+  --color-parchment: #f1e9d8;
+  --color-gold: #e3a13a;
+  --color-gold-light: #f0c274;
+  --color-ember: #c1552c;
+  --color-plum: #5b3a5c;
+  --color-plum-dark: #2c1c30;
+
+  --font-display: "Playfair Display", "Georgia", serif;
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+  }
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  .btn-gold {
+    @apply inline-block rounded-full bg-gold px-7 py-3 font-semibold text-ink shadow-lg shadow-ember/20 transition hover:bg-gold-light hover:-translate-y-0.5;
+  }
+  .btn-outline {
+    @apply inline-block rounded-full border-2 border-cream/70 px-7 py-3 font-semibold text-cream transition hover:bg-cream hover:text-ink;
+  }
+  .section-eyebrow {
+    @apply mb-3 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-ember;
+  }
+}
