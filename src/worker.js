@@ -1,14 +1,12 @@
 /**
  * Cloudflare Worker serving Aurora Theatre Hong Kong's static site (via the
- * ASSETS binding) and handling POST /contact directly. Sends two emails via
+ * ASSETS binding) and handling POST /contact directly. Sends ONE email via
  * the AWS SES v2 REST API with a hand-rolled SigV4 signature (no AWS SDK —
- * the Workers runtime doesn't support it):
- *
- *   1. A plain notification to the site owner, reply-to set to the visitor,
- *      so replying goes straight to them.
- *   2. An HTML confirmation to the visitor, with a header image and a copy
- *      of their message for their records. Best-effort: if only this send
- *      fails, the request still reports success.
+ * the Workers runtime doesn't support it): addressed to the visitor, with
+ * the site owner CC'd, and Reply-To set to the owner so a visitor's reply
+ * continues the conversation with Aurora Theatre. The owner sees the same
+ * polished confirmation the visitor gets, with the submitted details
+ * included, so there's no separate plain-text notification to maintain.
  *
  * Required secrets (set via `wrangler secret put <NAME>`):
  *   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION,
@@ -20,7 +18,10 @@
 const SITE_NAME = "Aurora Theatre Hong Kong";
 const WELCOME_MESSAGE =
   "Thanks for getting in touch with Aurora Theatre Hong Kong — we've received your message and will get back to you soon.";
-const HEADER_IMAGE_URL = "https://www.auroratheatrehk.com/images/photos/2018-01-the-crucible-1.jpg";
+// Points at the workers.dev URL since auroratheatrehk.com still resolves to
+// the old WordPress site — switch this to https://www.auroratheatrehk.com/...
+// once the real domain is cut over to this Worker.
+const HEADER_IMAGE_URL = "https://aurora-theatre-hk.gocloudconsulting.workers.dev/images/photos/2018-01-the-crucible-1.jpg";
 
 export default {
   async fetch(request, env, ctx) {
@@ -52,67 +53,31 @@ async function handleContact(request, env) {
       return jsonResponse({ success: false, error: "Please enter a valid email address." }, 400);
     }
 
-    const awsCreds = {
-      accessKeyId: env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-      region: env.AWS_REGION,
-    };
-
-    // 1. Notify the site owner — this is the send that matters for
-    // follow-up, so a failure here is a real failure of the request.
-    const ownerPayload = {
+    const payload = {
       FromEmailAddress: env.SES_FROM_EMAIL,
-      Destination: { ToAddresses: [env.SES_TO_EMAIL] },
-      ReplyToAddresses: [email],
+      Destination: { ToAddresses: [email], CcAddresses: [env.SES_TO_EMAIL] },
+      ReplyToAddresses: [env.SES_TO_EMAIL],
       Content: {
         Simple: {
-          Subject: { Data: `New contact form submission from ${name}`, Charset: "UTF-8" },
+          Subject: { Data: `We've received your message — ${SITE_NAME}`, Charset: "UTF-8" },
           Body: {
-            Text: {
-              Data: `Name: ${name}\nEmail: ${email}\n${phone ? `Phone: ${phone}\n` : ""}\nMessage:\n${message}`,
-              Charset: "UTF-8",
-            },
-            Html: {
-              Data:
-                `<p><strong>Name:</strong> ${escapeHtml(name)}</p>` +
-                `<p><strong>Email:</strong> ${escapeHtml(email)}</p>` +
-                (phone ? `<p><strong>Phone:</strong> ${escapeHtml(phone)}</p>` : "") +
-                `<p><strong>Message:</strong></p><p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>`,
-              Charset: "UTF-8",
-            },
+            Text: { Data: buildConfirmationText({ name, email, phone, message }), Charset: "UTF-8" },
+            Html: { Data: buildConfirmationHtml({ name, email, phone, message }), Charset: "UTF-8" },
           },
         },
       },
     };
 
-    const ownerResponse = await sendViaSES({ ...awsCreds, payload: ownerPayload });
-    if (!ownerResponse.ok) {
-      console.error("SES owner notification error:", await ownerResponse.text());
-      return jsonResponse({ success: false, error: "Could not send message. Please try again later." }, 502);
-    }
+    const response = await sendViaSES({
+      accessKeyId: env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+      region: env.AWS_REGION,
+      payload,
+    });
 
-    // 2. Confirm receipt to the visitor — best-effort.
-    try {
-      const visitorPayload = {
-        FromEmailAddress: env.SES_FROM_EMAIL,
-        Destination: { ToAddresses: [email] },
-        ReplyToAddresses: [env.SES_TO_EMAIL],
-        Content: {
-          Simple: {
-            Subject: { Data: `We've received your message — ${SITE_NAME}`, Charset: "UTF-8" },
-            Body: {
-              Text: { Data: buildConfirmationText({ name, message }), Charset: "UTF-8" },
-              Html: { Data: buildConfirmationHtml({ name, message }), Charset: "UTF-8" },
-            },
-          },
-        },
-      };
-      const visitorResponse = await sendViaSES({ ...awsCreds, payload: visitorPayload });
-      if (!visitorResponse.ok) {
-        console.error("SES confirmation email error:", await visitorResponse.text());
-      }
-    } catch (confirmationErr) {
-      console.error("Confirmation email error:", confirmationErr);
+    if (!response.ok) {
+      console.error("SES send error:", await response.text());
+      return jsonResponse({ success: false, error: "Could not send message. Please try again later." }, 502);
     }
 
     return jsonResponse({ success: true }, 200);
@@ -122,9 +87,16 @@ async function handleContact(request, env) {
   }
 }
 
-// ---- Visitor confirmation email ----
+// ---- Confirmation email (visitor To, owner CC) ----
+//
+// Email clients are far less forgiving than browsers: many strip <style>
+// blocks (Gmail), and Outlook desktop still renders with Word's HTML engine,
+// which has no flexbox/grid support. A single-column table with inline
+// styles and a max-width container is the layout that survives across all
+// of them, and it already reads fine on mobile without media queries since
+// it's fluid up to that max-width.
 
-function buildConfirmationHtml({ name, message }) {
+function buildConfirmationHtml({ name, email, phone, message }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,27 +108,49 @@ function buildConfirmationHtml({ name, message }) {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f5; padding:24px 0;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background-color:#ffffff; border-radius:8px; overflow:hidden;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
           <tr>
-            <td>
+            <td style="position:relative;">
               <img src="${HEADER_IMAGE_URL}" alt="${escapeHtml(SITE_NAME)}" width="600" style="width:100%; max-width:600px; height:auto; display:block; border:0;">
             </td>
           </tr>
           <tr>
-            <td style="padding:32px 24px;">
-              <h1 style="margin:0 0 16px; font-size:20px; color:#15100c;">We've received your message</h1>
-              <p style="margin:0 0 16px; font-size:15px; line-height:1.6; color:#374151;">${escapeHtml(WELCOME_MESSAGE)}</p>
-              <p style="margin:0 0 8px; font-size:15px; color:#374151;">Hi ${escapeHtml(name)}, here's a copy of what you sent us for your records:</p>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9fafb; border-radius:6px; margin-top:8px;">
+            <td style="padding:8px 32px 0;">
+              <p style="margin:20px 0 0; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#c1552c;">${escapeHtml(SITE_NAME)}</p>
+              <h1 style="margin:6px 0 16px; font-size:22px; line-height:1.3; color:#15100c; font-family:Georgia,'Times New Roman',serif;">We've received your message</h1>
+              <p style="margin:0 0 24px; font-size:15px; line-height:1.6; color:#374151;">${escapeHtml(WELCOME_MESSAGE)}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 32px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9f6ee; border-radius:8px; border:1px solid #ece4d3;">
                 <tr>
-                  <td style="padding:16px; font-size:14px; line-height:1.5; color:#4b5563; white-space:pre-wrap;">${escapeHtml(message)}</td>
+                  <td style="padding:20px 24px;">
+                    <p style="margin:0 0 14px; font-size:13px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#5b3a5c;">Submitted details</p>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:4px 0; font-size:13px; color:#9ca3af; width:80px; vertical-align:top;">Name</td>
+                        <td style="padding:4px 0; font-size:14px; color:#15100c;">${escapeHtml(name)}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:4px 0; font-size:13px; color:#9ca3af; vertical-align:top;">Email</td>
+                        <td style="padding:4px 0; font-size:14px; color:#15100c;">${escapeHtml(email)}</td>
+                      </tr>
+                      ${phone ? `<tr>
+                        <td style="padding:4px 0; font-size:13px; color:#9ca3af; vertical-align:top;">Phone</td>
+                        <td style="padding:4px 0; font-size:14px; color:#15100c;">${escapeHtml(phone)}</td>
+                      </tr>` : ""}
+                    </table>
+                    <p style="margin:16px 0 6px; font-size:13px; color:#9ca3af;">Message</p>
+                    <p style="margin:0; font-size:14px; line-height:1.6; color:#15100c; white-space:pre-wrap;">${escapeHtml(message)}</p>
+                  </td>
                 </tr>
               </table>
             </td>
           </tr>
           <tr>
-            <td style="padding:16px 24px; background-color:#f9fafb; font-size:12px; color:#9ca3af; text-align:center;">
-              ${escapeHtml(SITE_NAME)}
+            <td style="padding:18px 32px; background-color:#15100c; font-size:12px; color:#9a9088; text-align:center;">
+              ${escapeHtml(SITE_NAME)} &middot; Hong Kong
             </td>
           </tr>
         </table>
@@ -167,8 +161,16 @@ function buildConfirmationHtml({ name, message }) {
 </html>`;
 }
 
-function buildConfirmationText({ name, message }) {
-  return `Hi ${name},\n\n${WELCOME_MESSAGE}\n\nHere's a copy of what you sent us:\n\n${message}\n\n— ${SITE_NAME}`;
+function buildConfirmationText({ name, email, phone, message }) {
+  return (
+    `${WELCOME_MESSAGE}\n\n` +
+    `Submitted details:\n` +
+    `Name: ${name}\n` +
+    `Email: ${email}\n` +
+    (phone ? `Phone: ${phone}\n` : "") +
+    `\nMessage:\n${message}\n\n` +
+    `— ${SITE_NAME}`
+  );
 }
 
 // ---- AWS SigV4 signing + SES send (no SDK) ----
