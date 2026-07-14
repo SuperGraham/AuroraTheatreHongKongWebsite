@@ -39,9 +39,7 @@ While actively editing styles: `npm run dev` runs Tailwind in watch mode.
 
 ## Contact form — required setup before it can send email
 
-The contact form (`/contact`) is handled entirely by `src/worker.js`, which sends two emails via a hand-signed AWS SES v2 API call (no AWS SDK, since the Workers runtime doesn't support it):
-1. A notification to the site owner, sent to the `SES_TO_EMAIL` var (see below).
-2. An HTML confirmation back to the visitor.
+The contact form (`/contact`) is handled entirely by `src/worker.js`, which sends a single HTML email via a hand-signed AWS SES v2 API call (no AWS SDK, since the Workers runtime doesn't support it) — addressed to the visitor, with the site owner (`SES_TO_EMAIL`) CC'd and set as reply-to. It includes a "submitted details" block (name/email/phone/message) so the owner has everything needed to follow up without a second email.
 
 Spam protection is a honeypot field only (no CAPTCHA/Turnstile) — sufficient for a low-traffic site, revisit if spam becomes a problem.
 
