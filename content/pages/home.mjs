@@ -37,9 +37,9 @@ export function homeBody() {
         ${eyebrow("Watch")}
         <h2 class="font-display text-2xl font-bold md:text-3xl">Our First Virtual Sitcom: Close Quarters</h2>
         <p class="mt-4 text-cream/80">Written by Ryan King. With Nicole Garbellini and David Ogilvie.</p>
-        <a href="https://www.youtube.com/watch?v=QQ2c2EuRaA8" target="_blank" rel="noopener" class="btn-outline mt-6">Watch All The Episodes</a>
+        <a href="https://youtube.com/playlist?list=PLwhWmWJPoEmHqEQek0JGlt2JEeD4eVPIX&si=MEBlDrgbCjc-mzsv" target="_blank" rel="noopener" class="btn-outline mt-6">Watch All The Episodes</a>
       </div>
-      <a href="https://www.youtube.com/watch?v=QQ2c2EuRaA8" target="_blank" rel="noopener" class="group order-1 relative flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-charcoal shadow-2xl md:order-2">
+      <a href="https://youtube.com/playlist?list=PLwhWmWJPoEmHqEQek0JGlt2JEeD4eVPIX&si=MEBlDrgbCjc-mzsv" target="_blank" rel="noopener" class="group order-1 relative flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-charcoal shadow-2xl md:order-2">
         ${img("2018-01-the-crucible-1.jpg", "Watch Close Quarters on YouTube", "absolute inset-0 h-full w-full object-cover opacity-60 transition group-hover:opacity-75")}
         <span class="relative flex h-16 w-16 items-center justify-center rounded-full bg-gold/90 shadow-lg transition group-hover:scale-110">
           <svg class="ml-1 h-6 w-6 text-ink" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -110,7 +110,7 @@ export function homeBody() {
       <h2 class="font-display text-2xl font-bold">Stay Close to Aurora Theatre</h2>
       <div class="mt-6 flex justify-center gap-6">
         <a href="https://www.facebook.com/auroratheatrehk" target="_blank" rel="noopener" class="btn-outline">Facebook</a>
-        <a href="https://www.youtube.com/playlist?list=PLwhWmWJPoEmHqEQek0JGlt2JEeD4eVPIX" target="_blank" rel="noopener" class="btn-outline">YouTube</a>
+        <a href="https://youtube.com/playlist?list=PLwhWmWJPoEmHqEQek0JGlt2JEeD4eVPIX&si=MEBlDrgbCjc-mzsv" target="_blank" rel="noopener" class="btn-outline">YouTube</a>
       </div>
     </div>
   </section>
