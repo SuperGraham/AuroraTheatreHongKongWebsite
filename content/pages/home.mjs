@@ -40,7 +40,7 @@ export function homeBody() {
         <a href="https://youtube.com/playlist?list=PLwhWmWJPoEmHqEQek0JGlt2JEeD4eVPIX&si=MEBlDrgbCjc-mzsv" target="_blank" rel="noopener" class="btn-outline mt-6">Watch All The Episodes</a>
       </div>
       <a href="https://youtube.com/playlist?list=PLwhWmWJPoEmHqEQek0JGlt2JEeD4eVPIX&si=MEBlDrgbCjc-mzsv" target="_blank" rel="noopener" class="group order-1 relative flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-charcoal shadow-2xl md:order-2">
-        ${img("2018-01-the-crucible-1.jpg", "Watch Close Quarters on YouTube", "absolute inset-0 h-full w-full object-cover opacity-60 transition group-hover:opacity-75")}
+        ${img("close-quarters-title-card.jpg", "Close Quarters — watch on YouTube", "absolute inset-0 h-full w-full object-cover transition group-hover:scale-105")}
         <span class="relative flex h-16 w-16 items-center justify-center rounded-full bg-gold/90 shadow-lg transition group-hover:scale-110">
           <svg class="ml-1 h-6 w-6 text-ink" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </span>
