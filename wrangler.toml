@@ -4,8 +4,8 @@ compatibility_date = "2026-07-13"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-SES_TO_EMAIL = "graham_watkins@yahoo.com"
-SES_FROM_EMAIL = "auroratheatrehongkong@alerts.gocloud.zone"
+SES_TO_EMAIL = "nicolewest1920@gmail.com"
+SES_FROM_EMAIL = "hello@auroratheatrehk.com"
 AWS_ACCESS_KEY_ID = "AKIAVFNKA4BCG5YKMKT2"
 AWS_REGION = "eu-west-2"
 
