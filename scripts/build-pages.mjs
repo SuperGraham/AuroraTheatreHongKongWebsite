@@ -13,6 +13,7 @@ import { sponsorsBody } from "../content/pages/sponsors.mjs";
 import { contactBody } from "../content/pages/contact.mjs";
 import { privacyBody } from "../content/pages/privacy-policy.mjs";
 import { notFoundBody } from "../content/pages/not-found.mjs";
+import { testimonialsBody } from "../content/pages/testimonials.mjs";
 
 const ROOT = path.join(path.dirname(path.dirname(fileURLToPath(import.meta.url))), "public");
 
@@ -83,6 +84,13 @@ const PAGES = [
     path: "/contact",
     bodyHtml: contactBody(),
     schemaType: "ContactPage",
+  },
+  {
+    file: "testimonials.html",
+    title: "Testimonials",
+    description: "Reviews and press coverage of Aurora Theatre Hong Kong's productions, workshops and events.",
+    path: "/testimonials",
+    bodyHtml: testimonialsBody(),
   },
   {
     file: "privacy-policy.html",

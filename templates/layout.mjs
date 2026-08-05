@@ -6,6 +6,17 @@ const NAV = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   {
+    label: "Services",
+    children: [
+      { label: "Theatre Productions", href: "/services/theatre-productions" },
+      { label: "Drama in Education", href: "/services/drama-in-education" },
+      { label: "Corporate Training", href: "/services/corporate-training" },
+      { label: "Hospitality & Entertainment", href: "/services/hospitality-entertainment" },
+      { label: "Workshops & Coaching", href: "/services/workshops-and-coaching" },
+      { label: "Casting", href: "/services/casting" },
+    ],
+  },
+  {
     label: "Productions",
     children: [
       { label: "Current Productions", href: "/current-productions" },
@@ -13,13 +24,7 @@ const NAV = [
     ],
   },
   { label: "Gallery", href: "/gallery" },
-  {
-    label: "Services",
-    children: [
-      { label: "Classes & Workshops", href: "/classes-and-workshops" },
-      { label: "Coaching", href: "/coaching" },
-    ],
-  },
+  { label: "Testimonials", href: "/testimonials" },
   { label: "Blog", href: "/blog/" },
   { label: "Contact", href: "/contact" },
 ];
@@ -37,7 +42,7 @@ function navLinkHtml(item, path) {
           ${item.label}
           <svg class="h-3 w-3 transition group-[.open]:rotate-180" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5"/></svg>
         </button>
-        <div class="dropdown-menu md:invisible md:absolute md:left-0 md:top-full md:w-56 md:rounded-lg md:bg-charcoal md:opacity-0 md:shadow-xl md:ring-1 md:ring-cream/10 md:transition md:group-[.open]:visible md:group-[.open]:opacity-100">
+        <div class="dropdown-menu md:invisible md:absolute md:left-0 md:top-full md:w-64 md:rounded-lg md:bg-charcoal md:opacity-0 md:shadow-xl md:ring-1 md:ring-cream/10 md:transition md:group-[.open]:visible md:group-[.open]:opacity-100">
           ${item.children
             .map(
               (c) => `<a href="${c.href}" class="block px-5 py-3 text-sm text-cream/90 hover:bg-charcoal-light hover:text-gold ${c.href === path ? "text-gold" : ""}">${c.label}</a>`
@@ -58,15 +63,15 @@ function headerHtml(path) {
         <img src="/images/logo.png" alt="Aurora Theatre Hong Kong logo" class="h-11 w-11">
         <span class="font-display text-lg leading-none text-cream">Aurora <span class="block text-xs font-body font-semibold uppercase tracking-[0.3em] text-gold">Theatre</span></span>
       </a>
-      <nav class="hidden md:flex md:items-center md:gap-8" id="primary-nav">
+      <nav class="hidden lg:flex lg:items-center lg:gap-5" id="primary-nav">
         ${NAV.map((item) => navLinkHtml(item, path)).join("")}
       </nav>
-      <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden text-cream">
+      <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" class="lg:hidden text-cream">
         <svg id="menu-icon-open" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg id="menu-icon-close" class="hidden h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
-    <div id="mobile-nav" class="hidden md:hidden border-t border-cream/10 px-4 pb-4">
+    <div id="mobile-nav" class="hidden lg:hidden border-t border-cream/10 px-4 pb-4">
       ${NAV.map((item) => {
         if (item.children) {
           return `<div class="border-b border-cream/10 py-2">
@@ -84,26 +89,36 @@ function footerHtml() {
   const year = new Date().getFullYear();
   return `
   <footer class="bg-plum-dark text-cream/80">
-    <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-4 md:px-8">
-      <div>
+    <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-5 md:px-8">
+      <div class="md:col-span-1">
         <img src="/images/logo-white.png" alt="Aurora Theatre Hong Kong" class="mb-4 h-14 w-14">
-        <p class="text-sm leading-relaxed text-cream/70">Aurora Theatre Hong Kong is an independent theatre company promoting English-language shows in the local Hong Kong art scene since 2010.</p>
+        <p class="text-sm leading-relaxed text-cream/70">Aurora Theatre creates theatre, develops confident communicators and delivers unforgettable experiences for schools, businesses and audiences.</p>
       </div>
       <div>
-        <h3 class="mb-4 font-display text-lg text-gold">Useful Links</h3>
+        <h3 class="mb-4 font-display text-lg text-gold">Services</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/services/theatre-productions" class="hover:text-gold">Theatre Productions</a></li>
+          <li><a href="/services/drama-in-education" class="hover:text-gold">Drama in Education</a></li>
+          <li><a href="/services/corporate-training" class="hover:text-gold">Corporate Training</a></li>
+          <li><a href="/services/hospitality-entertainment" class="hover:text-gold">Hospitality &amp; Entertainment</a></li>
+          <li><a href="/services/workshops-and-coaching" class="hover:text-gold">Workshops &amp; Coaching</a></li>
+          <li><a href="/services/casting" class="hover:text-gold">Casting</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-4 font-display text-lg text-gold">Explore</h3>
         <ul class="space-y-2 text-sm">
           <li><a href="/" class="hover:text-gold">Home</a></li>
           <li><a href="/about" class="hover:text-gold">About</a></li>
           <li><a href="/current-productions" class="hover:text-gold">Productions</a></li>
           <li><a href="/gallery" class="hover:text-gold">Gallery</a></li>
-          <li><a href="/classes-and-workshops" class="hover:text-gold">Classes &amp; Workshops</a></li>
+          <li><a href="/testimonials" class="hover:text-gold">Testimonials</a></li>
           <li><a href="/blog/" class="hover:text-gold">Blog</a></li>
         </ul>
       </div>
       <div>
         <h3 class="mb-4 font-display text-lg text-gold">More</h3>
         <ul class="space-y-2 text-sm">
-          <li><a href="/coaching" class="hover:text-gold">Coaching</a></li>
           <li><a href="/sponsors" class="hover:text-gold">Sponsors</a></li>
           <li><a href="/contact" class="hover:text-gold">Contact</a></li>
           <li><a href="/privacy-policy" class="hover:text-gold">Privacy Policy</a></li>

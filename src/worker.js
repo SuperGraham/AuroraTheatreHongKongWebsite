@@ -38,7 +38,7 @@ export default {
 async function handleContact(request, env) {
   try {
     const data = await request.json();
-    const { name, email, phone, message, website } = data;
+    const { name, email, phone, interest, message, website } = data;
 
     // Honeypot: bots fill every field including hidden ones. Return a fake
     // success so the bot doesn't learn its submission was rejected.
@@ -61,8 +61,8 @@ async function handleContact(request, env) {
         Simple: {
           Subject: { Data: `We've received your message — ${SITE_NAME}`, Charset: "UTF-8" },
           Body: {
-            Text: { Data: buildConfirmationText({ name, email, phone, message }), Charset: "UTF-8" },
-            Html: { Data: buildConfirmationHtml({ name, email, phone, message }), Charset: "UTF-8" },
+            Text: { Data: buildConfirmationText({ name, email, phone, interest, message }), Charset: "UTF-8" },
+            Html: { Data: buildConfirmationHtml({ name, email, phone, interest, message }), Charset: "UTF-8" },
           },
         },
       },
@@ -96,7 +96,7 @@ async function handleContact(request, env) {
 // of them, and it already reads fine on mobile without media queries since
 // it's fluid up to that max-width.
 
-function buildConfirmationHtml({ name, email, phone, message }) {
+function buildConfirmationHtml({ name, email, phone, interest, message }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -140,6 +140,10 @@ function buildConfirmationHtml({ name, email, phone, message }) {
                         <td style="padding:4px 0; font-size:13px; color:#9ca3af; vertical-align:top;">Phone</td>
                         <td style="padding:4px 0; font-size:14px; color:#15100c;">${escapeHtml(phone)}</td>
                       </tr>` : ""}
+                      ${interest ? `<tr>
+                        <td style="padding:4px 0; font-size:13px; color:#9ca3af; vertical-align:top;">Interested in</td>
+                        <td style="padding:4px 0; font-size:14px; color:#15100c;">${escapeHtml(interest)}</td>
+                      </tr>` : ""}
                     </table>
                     <p style="margin:16px 0 6px; font-size:13px; color:#9ca3af;">Message</p>
                     <p style="margin:0; font-size:14px; line-height:1.6; color:#15100c; white-space:pre-wrap;">${escapeHtml(message)}</p>
@@ -161,13 +165,14 @@ function buildConfirmationHtml({ name, email, phone, message }) {
 </html>`;
 }
 
-function buildConfirmationText({ name, email, phone, message }) {
+function buildConfirmationText({ name, email, phone, interest, message }) {
   return (
     `${WELCOME_MESSAGE}\n\n` +
     `Submitted details:\n` +
     `Name: ${name}\n` +
     `Email: ${email}\n` +
     (phone ? `Phone: ${phone}\n` : "") +
+    (interest ? `Interested in: ${interest}\n` : "") +
     `\nMessage:\n${message}\n\n` +
     `— ${SITE_NAME}`
   );

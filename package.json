@@ -2,7 +2,7 @@
   "name": "aurora-theatre-hk",
   "private": true,
   "scripts": {
-    "build:pages": "node scripts/build-pages.mjs && node scripts/build-galleries.mjs",
+    "build:pages": "node scripts/build-pages.mjs && node scripts/build-galleries.mjs && node scripts/build-services.mjs",
     "build:blog": "node scripts/build-blog.mjs",
     "build:css": "tailwindcss -i ./css/input.css -o ./public/css/style.css --minify",
     "build:sitemap": "SITE_URL=https://www.auroratheatrehk.com node scripts/generate-sitemap.js ./public",

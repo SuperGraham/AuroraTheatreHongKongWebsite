@@ -7,10 +7,13 @@
     e.preventDefault();
     status.textContent = "Sending…";
 
+    const interestField = form.querySelector('input[name="interest"]:checked');
+
     const payload = {
       name: form.name.value.trim(),
       email: form.email.value.trim(),
       phone: form.phone.value.trim(),
+      interest: interestField ? interestField.value : "",
       message: form.message.value.trim(),
       website: form.website.value,
     };

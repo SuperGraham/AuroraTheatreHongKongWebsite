@@ -1,5 +1,17 @@
 import { img, eyebrow } from "../helpers.mjs";
 
+const CATEGORIES = [
+  "Theatre",
+  "Drama in Education",
+  "Public Speaking",
+  "Communication",
+  "Leadership",
+  "Behind the Scenes",
+  "Storytelling",
+  "Acting Tips",
+  "News",
+];
+
 export function blogIndexBody(posts) {
   return `
   <section class="bg-ink py-16 text-cream md:py-24">
@@ -7,6 +19,9 @@ export function blogIndexBody(posts) {
       ${eyebrow("Blog")}
       <h1 class="font-display text-4xl font-bold md:text-5xl">Aurora Theatre Blog</h1>
       <p class="mt-4 text-cream/75">Acting tips, drama games, and stories from Aurora Theatre Hong Kong.</p>
+      <div class="mt-6 flex flex-wrap justify-center gap-2">
+        ${CATEGORIES.map((c) => `<span class="rounded-full bg-cream/10 px-4 py-1.5 text-xs font-medium text-cream/70 ring-1 ring-cream/15">${c}</span>`).join("")}
+      </div>
     </div>
   </section>
 

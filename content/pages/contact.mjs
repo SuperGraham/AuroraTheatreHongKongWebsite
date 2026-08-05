@@ -6,7 +6,7 @@ export function contactBody() {
     <div class="mx-auto max-w-3xl px-4 text-center md:px-8">
       ${eyebrow("Get In Touch")}
       <h1 class="font-display text-4xl font-bold md:text-5xl">Contact Aurora Theatre</h1>
-      <p class="mt-4 text-cream/75">Questions about classes, coaching, productions, workshops or sponsorship &mdash; we'd love to hear from you.</p>
+      <p class="mt-4 text-cream/75">Questions about theatre productions, school workshops, corporate training, hospitality entertainment, coaching or casting &mdash; we'd love to hear from you.</p>
     </div>
   </section>
 
@@ -35,6 +35,29 @@ export function contactBody() {
           <label for="phone" class="mb-1 block text-sm font-semibold text-ink">Phone <span class="font-normal text-ink/40">(optional)</span></label>
           <input type="tel" id="phone" name="phone" autocomplete="tel" class="w-full rounded-lg border border-ink/15 px-4 py-2.5 text-ink focus:border-ember focus:outline-none focus:ring-1 focus:ring-ember">
         </div>
+        <fieldset class="mb-5">
+          <legend class="mb-2 block text-sm font-semibold text-ink">I am interested in</legend>
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            ${[
+              "School workshops",
+              "Theatre productions",
+              "Corporate training",
+              "Hospitality entertainment",
+              "Acting coaching",
+              "Casting",
+              "Other",
+            ]
+              .map(
+                (opt, i) => `
+            <label class="flex items-center gap-2 rounded-lg border border-ink/15 px-3 py-2 text-sm text-ink/80 has-[:checked]:border-ember has-[:checked]:bg-ember/5">
+              <input type="radio" name="interest" value="${opt}" ${i === 0 ? "required" : ""} class="accent-ember">
+              ${opt}
+            </label>`
+              )
+              .join("")}
+          </div>
+        </fieldset>
+
         <div class="mb-5">
           <label for="message" class="mb-1 block text-sm font-semibold text-ink">Message</label>
           <textarea id="message" name="message" rows="5" required class="w-full rounded-lg border border-ink/15 px-4 py-2.5 text-ink focus:border-ember focus:outline-none focus:ring-1 focus:ring-ember"></textarea>

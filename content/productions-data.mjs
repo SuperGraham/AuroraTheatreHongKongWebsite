@@ -3,6 +3,30 @@
 // dedicated photo gallery page where one exists.
 export const PAST_PRODUCTIONS = [
   {
+    title: "Constellations",
+    poster: "poster-constellations.jpg",
+    description:
+      "Nick Payne's acclaimed two-hander follows a relationship across parallel universes, weaving quantum physics and romance into one of contemporary theatre's most inventive love stories. Jockey Club Studio Theatre, HK Fringe Club, May 2025.",
+  },
+  {
+    title: "The 39 Steps",
+    poster: "poster-the-39-steps.jpg",
+    description:
+      `Patrick Barlow's fast-paced, award-winning comic thriller adaptation of John Buchan's novel and Hitchcock's film — four actors play well over a hundred characters in a story of murder, mistaken identity and a race across Britain. Directed by Nicole Garbellini, Fringe Underground Theatre, Central.`,
+  },
+  {
+    title: "Mussolini's Mistresses",
+    poster: "poster-mussolinis-mistresses.jpg",
+    description:
+      "An original production staged at the Hong Kong Arts Centre, Wanchai, November 2021.",
+  },
+  {
+    title: "The Pride",
+    poster: "poster-the-pride.jpg",
+    description:
+      "Alexi Kaye Campbell's acclaimed play interweaves two love stories separated by decades, exploring identity, courage and how society's attitudes shift across generations. Presented with the Fringe Club.",
+  },
+  {
     title: `Dial "M" For Murder`,
     poster: "2018-01-new-Dial-M-poster-2-200x200.jpg",
     description:
