@@ -1,5 +1,23 @@
 export const GALLERIES = [
   {
+    slug: "the-open-couple",
+    title: "The Open Couple",
+    credit: "Photos by Aurora Theatre",
+    images: [
+      "open-couple-1.jpg", "open-couple-2.jpg", "open-couple-3.jpg", "open-couple-4.jpg",
+      "open-couple-5.jpg", "open-couple-6.jpg", "open-couple-7.jpg", "open-couple-8.jpg",
+    ],
+  },
+  {
+    slug: "mussolinis-mistresses",
+    title: "Mussolini's Mistresses",
+    credit: "Photos by Aurora Theatre",
+    images: [
+      "mussolinis-mistresses-1.jpg", "mussolinis-mistresses-2.jpg", "mussolinis-mistresses-3.jpg", "mussolinis-mistresses-4.jpg",
+      "mussolinis-mistresses-5.jpg", "mussolinis-mistresses-6.jpg", "mussolinis-mistresses-7.jpg", "mussolinis-mistresses-8.jpg",
+    ],
+  },
+  {
     slug: "inherit-the-wind",
     title: "Inherit the Wind",
     credit: "Photos by Aaron T. Michelson",

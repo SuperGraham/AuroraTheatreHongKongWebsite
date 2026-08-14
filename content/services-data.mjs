@@ -50,11 +50,12 @@ export const SERVICES = [
     heroImage: "school-performance-sherlock.jpg",
     heroAlt: "Student performance at a school drama workshop",
     gallery: [
-      { file: "school-workshop-group-1.jpg", alt: "Aurora Theatre school workshop" },
       { file: "school-drama-session.jpg", alt: "Drama in education session" },
       { file: "school-trip-hkarts-centre.jpg", alt: "School visit to Hong Kong Arts Centre" },
       { file: "school-workshop-group-2.jpg", alt: "Aurora Theatre school workshop" },
       { file: "school-theatre-audience.jpg", alt: "Students watching a theatre performance" },
+      { file: "school-workshop-stage-performance.jpg", alt: "Students performing on stage" },
+      { file: "school-workshop-teachers-signs.jpg", alt: "Aurora Theatre workshop facilitators" },
     ],
   },
   {
@@ -92,7 +93,9 @@ export const SERVICES = [
       { file: "corporate-roleplay.jpg", alt: "Corporate training role-play exercise" },
       { file: "corporate-circle-workshop.jpg", alt: "Corporate communication workshop" },
       { file: "corporate-hallway-discussion.jpg", alt: "Corporate training discussion" },
-      { file: "corporate-group-datm.jpg", alt: "Corporate training group session" },
+      { file: "corporate-presentation-screen.jpg", alt: "Corporate training presentation" },
+      { file: "corporate-singing-mic.jpg", alt: "Corporate training performance exercise" },
+      { file: "corporate-group-table.jpg", alt: "Corporate training group session" },
     ],
   },
   {
@@ -122,6 +125,7 @@ export const SERVICES = [
       { file: "hospitality-quiz-night-2.jpg", alt: "Quiz night entertainment at a restaurant" },
       { file: "hospitality-dinner-speech.jpg", alt: "Corporate dinner entertainment" },
       { file: "entertainment-green-screen-shoot.jpg", alt: "Behind the scenes of an entertainment video shoot" },
+      { file: "hospitality-group-event.jpg", alt: "Hospitality entertainment event group photo" },
     ],
     featured: {
       heading: "Featured: An Unsolved Heist at The Murray, Hong Kong",

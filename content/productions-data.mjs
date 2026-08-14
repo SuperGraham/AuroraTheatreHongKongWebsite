@@ -17,8 +17,16 @@ export const PAST_PRODUCTIONS = [
   {
     title: "Mussolini's Mistresses",
     poster: "poster-mussolinis-mistresses.jpg",
+    gallerySlug: "mussolinis-mistresses",
     description:
       "An original production staged at the Hong Kong Arts Centre, Wanchai, November 2021.",
+  },
+  {
+    title: "The Open Couple",
+    poster: "open-couple-1.jpg",
+    gallerySlug: "the-open-couple",
+    description:
+      "Presented by The Italian Institute of Culture, Aurora Theatre returned to the stage with Dario Fo's timeless piece.",
   },
   {
     title: "The Pride",

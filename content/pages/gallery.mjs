@@ -4,6 +4,8 @@ import { PAST_PRODUCTIONS } from "../productions-data.mjs";
 const GALLERY_SHOWS = PAST_PRODUCTIONS.filter((p) => p.gallerySlug);
 
 const PHOTO_COUNTS = {
+  "the-open-couple": 8,
+  "mussolinis-mistresses": 8,
   "the-hecklers-2013": 7,
   "the-last-days-of-judas-iscariot": 12,
   romance: 5,

@@ -9,31 +9,31 @@ const ITEMS = [
   },
   {
     title: "Waitress On Top",
-    photo: "2022-12-15b653aa-ab38-40f8-86f0-ec4cedbdde71.jpg",
+    photo: "production-waitress-on-top.jpg",
     description:
       "The opera adaptation of La Serva Padrona by Giovanni Pergolesi has toured local schools, exposing students to Commedia Dell'Arte and Italian culture.",
   },
   {
     title: "Educational Workshops",
-    photo: "2022-09-IMG_8311.jpg",
+    photo: "2022-12-15b653aa-ab38-40f8-86f0-ec4cedbdde71.jpg",
     description:
       "Our teachers have been busy bringing dramatic material and performances to schools — seeing students blossom into their characters and performances was a true blessing to witness.",
   },
   {
     title: "Acting Classes for Adults",
-    photo: "2022-12-IMG_8601.jpg",
+    photo: "coaching-session-duo.jpg",
     description:
       "We regularly run acting courses for adults, including complementary trial classes anyone can try before booking a full course.",
   },
   {
     title: "Murder Mystery Dinner Theatre & Quiz Nights",
-    photo: "2022-12-PHOTO-2021-10-29-04-17-53.jpg",
+    photo: "2022-12-IMG_8601.jpg",
     description:
       "We've presented Murder Mystery Dinner Theatre at hotels across Hong Kong, and regularly host Quiz Nights at Grain in Kennedy Town — working in partnership with different clients for a fun night out.",
   },
   {
     title: "Murder Mysteries & Escape Rooms for the Classroom",
-    photo: null,
+    photo: "2022-12-PHOTO-2021-10-29-04-17-53.jpg",
     description:
       "Beyond in-school workshops, we offer a range of interactive programmes to engage students and help them develop creative skills and critical thinking.",
   },
