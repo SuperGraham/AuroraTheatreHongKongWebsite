@@ -53,6 +53,14 @@ const REDIRECTS = {
   "/blog-ls/": "/blog",
   "/home-bk/": "/",
 
+  // Old slug variants confirmed via the live WordPress site's own redirects
+  // (it 301s these itself today) and the Wayback Machine's full crawl
+  // history, which isn't reflected in the current sitemap since WordPress
+  // no longer serves these paths directly.
+  "/current-production/": "/current-productions",
+  "/current-production": "/current-productions",
+  "/old/contact/": "/contact",
+
   // Production photo galleries: /playbit_gallery/<slug>/ -> /gallery/<slug>
   "/playbit_gallery/": "/gallery",
   "/playbit_gallery/inherit-the-wind/": "/gallery/inherit-the-wind",
@@ -112,6 +120,12 @@ const REDIRECT_PREFIXES = [
   ["/playbit_artist/", "/"],
   ["/playbit_band/", "/"],
   ["/playbit_event/", "/"],
+  // A whole second WordPress install once lived at /old/ (explains the
+  // /old/wp-admin/ line in the live site's robots.txt) — it 404s at the
+  // directory root today, but the Wayback Machine shows individual pages
+  // under it (e.g. /old/contact/, redirected explicitly above) were once
+  // crawlable. Catch-all for anything else under there.
+  ["/old/", "/"],
 ];
 
 export default {
