@@ -12,4 +12,4 @@ AWS_REGION = "eu-west-2"
 [assets]
 directory = "public"
 binding = "ASSETS"
-run_worker_first = ["/contact"]
+run_worker_first = true
