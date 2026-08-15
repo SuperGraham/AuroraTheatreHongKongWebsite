@@ -56,4 +56,12 @@
   .section-eyebrow {
     @apply mb-3 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-ember;
   }
+  /* Contact form honeypot field — a real class, not an inline style=""
+     attribute, since the site's CSP (style-src 'self') has no
+     'unsafe-inline' and would silently drop an inline style, leaving the
+     field visible to bots instead of actually hiding it. */
+  .honeypot-field {
+    position: absolute;
+    left: -9999px;
+  }
 }

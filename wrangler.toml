@@ -12,4 +12,79 @@ AWS_REGION = "eu-west-2"
 [assets]
 directory = "public"
 binding = "ASSETS"
-run_worker_first = true
+not_found_handling = "404-page"
+# Scoped, not `true` — only these paths invoke src/worker.js; everything
+# else is served straight from public/ with zero Worker execution. Every
+# exact key in src/redirects.js's REDIRECTS needs its own entry here, and
+# every REDIRECT_PREFIXES prefix needs a matching "/prefix/*" entry — keep
+# both files in sync when either changes. Exception: skip an exact entry
+# here if it's already covered by one of this list's own prefixes (e.g.
+# "/old/contact/" under "/old/*") — wrangler's deploy-time validation
+# rejects redundant exact-path entries as an error, not just a no-op. The
+# Worker's own REDIRECTS-before-REDIRECT_PREFIXES check order still routes
+# it correctly once the broader prefix rule lets the request through.
+run_worker_first = [
+  "/contact",
+  "/about/",
+  "/sponsors/",
+  "/gallery/",
+  "/privacy-policy/",
+  "/past-productions/",
+  "/current-productions/",
+  "/contact/",
+  "/coaching/",
+  "/classes-and-workshops/",
+  "/thank-you/",
+  "/band-details/",
+  "/blog-rs/",
+  "/blog-ls/",
+  "/home-bk/",
+  "/current-production/",
+  "/current-production",
+  "/playbit_gallery/",
+  "/playbit_gallery/inherit-the-wind/",
+  "/playbit_gallery/the-last-5-years/",
+  "/playbit_gallery/romance/",
+  "/playbit_gallery/the-hecklers-2013/",
+  "/playbit_gallery/the-last-days-of-judas-iscariot/",
+  "/playbit_gallery/the-crucible/",
+  "/playbit_gallery/the-complete-works-of-william-shakespeare-abridged/",
+  "/lets-spike-up-the-drama-with-our-new-blog/",
+  "/actors-surviving-covid19/",
+  "/five-meisner-acting-tips-actors-should-know/",
+  "/zoom-lesson-plan-busy-drama-teachers/",
+  "/seven-ways-to-regain-your-lost-voice/",
+  "/how-to-face-another-hit-of-covid-19/",
+  "/drama-game-of-the-week-crazy-alphabet/",
+  "/drama-game-of-the-week-characters-swap/",
+  "/drama-game-of-the-week-delving-into-backstories/",
+  "/drama-game-of-the-week-emotional-relay/",
+  "/drama-game-of-the-week-conversations-in-the-dark/",
+  "/drama-game-of-the-week-mirror-mirror/",
+  "/drama-game-of-the-week-soundscapes/",
+  "/drama-game-of-the-week-constrained-improv/",
+  "/drama-game-of-the-week-freeze/",
+  "/1844-2/",
+  "/the-acting-chronicles-dealing-with-rejection/",
+  "/the-acting-chronicles-work-life-balance-for-actors/",
+  "/the-acting-chronicles-thriving-amidst-uncertainty/",
+  "/the-acting-chronicles-breaking-the-mould-stereotyping-and-typecasting/",
+  "/the-acting-chronicles-mastering-performance-anxiety/",
+  "/drama-teachers-challenges/",
+  "/a-parents-guide-balancing-school-and-acting/",
+  "/a-parents-guide-how-to-choose-the-perfect-acting-class/",
+  "/a-parents-guide-building-confidence/",
+  "/a-parents-guide-audition-success/",
+  "/a-parents-guide-building-resilience-in-young-performers/",
+  "/a-parents-guide-fostering-creativity/",
+  "/a-parents-guide-fostering-connections-in-the-acting-world/",
+  "/the-acting-chronicles-bonus-content-ai-for-actors/",
+  "/category/*",
+  "/tag/*",
+  "/author/*",
+  "/band_categories/*",
+  "/playbit_artist/*",
+  "/playbit_band/*",
+  "/playbit_event/*",
+  "/old/*",
+]

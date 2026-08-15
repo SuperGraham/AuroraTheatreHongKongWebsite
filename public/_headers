@@ -1,0 +1,31 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  X-Permitted-Cross-Domain-Policies: none
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: credentialless
+  Cross-Origin-Resource-Policy: same-origin
+  X-DNS-Prefetch-Control: off
+  Origin-Agent-Cluster: ?1
+
+# Strict-Transport-Security is deliberately NOT set here — enable it via
+# Cloudflare dashboard > SSL/TLS > Edge Certificates > HSTS instead. Setting
+# it both places produces a literal duplicate header, and the dashboard
+# setting covers something this file structurally can't: the HTTP->HTTPS
+# redirect Cloudflare's "Always Use HTTPS" issues is generated entirely at
+# the edge and never reaches this file's processing at all, so an
+# origin-only HSTS header would be missing from exactly the response where
+# first-visit protection matters most.
+#
+# Applies to every static asset response automatically. src/worker.js's
+# withSecurityHeaders() applies the identical set to every path listed in
+# wrangler.toml's run_worker_first (redirects, /contact, and the GET page
+# loads that fall through to env.ASSETS.fetch()), since those never reach
+# this file's processing at all. Keep both in sync if either changes.
+#
+# No Turnstile on this site (honeypot only), so unlike the skill's baseline
+# template this CSP has no challenges.cloudflare.com allowance in
+# script-src/frame-src — nothing on this site loads a cross-origin script.
