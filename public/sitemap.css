@@ -1,0 +1,64 @@
+/*
+  sitemap.css
+
+  Extracted from sitemap.xsl into its own file for one specific reason:
+  the site's own CSP (_headers, style-src 'self') has no 'unsafe-inline',
+  and sitemap.xml is served under that same CSP via the broad /* block —
+  an inline <style> block (or an inline style="" attribute) gets silently
+  blocked by the browser, not gracefully degraded, so the page renders
+  with zero custom styling at all rather than something merely plainer
+  than intended. Confirmed this was the actual cause of a real "looks
+  completely unstyled" report before rebuilding this as an external file
+  — same root cause, same fix pattern, as why the honeypot field uses a
+  CSS class instead of an inline style (see content/pages/contact.mjs).
+
+  Copy to public/sitemap.css alongside sitemap.xsl — nothing here needs
+  per-project customization either.
+*/
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 48px 24px; background: linear-gradient(180deg, #f4f4f5 0%, #eef0f3 100%); color: #111827; }
+.wrap { max-width: 920px; margin: 0 auto; }
+header { margin-bottom: 28px; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6366f1; margin: 0 0 8px; }
+h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.01em; }
+p.sub { color: #6b7280; font-size: 14px; margin: 0; }
+p.sub code { background: #e5e7eb; padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+.card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06); border: 1px solid #eceef1; }
+table { width: 100%; border-collapse: collapse; }
+thead th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; padding: 14px 20px; background: #f9fafb; border-bottom: 1px solid #eceef1; cursor: pointer; user-select: none; white-space: nowrap; }
+thead th:hover { color: #111827; }
+thead th .arrow { opacity: 0.35; font-size: 10px; margin-left: 4px; }
+tbody tr { border-bottom: 1px solid #f3f4f6; transition: background-color 120ms ease; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f9fafb; }
+td { padding: 14px 20px; font-size: 14px; vertical-align: middle; }
+td.url a { color: #4338ca; text-decoration: none; font-weight: 500; word-break: break-all; }
+td.url a:hover { text-decoration: underline; }
+td.lastmod { color: #6b7280; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #eef2ff; color: #4338ca; white-space: nowrap; }
+.priority-cell { display: flex; align-items: center; gap: 10px; min-width: 120px; }
+.priority-track { flex: 1; height: 6px; border-radius: 999px; background: #eceef1; overflow: hidden; min-width: 60px; }
+.priority-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #6366f1, #4338ca); }
+.priority-value { font-size: 12px; color: #6b7280; font-variant-numeric: tabular-nums; width: 30px; text-align: right; }
+footer { margin-top: 20px; text-align: center; font-size: 12px; color: #9ca3af; }
+
+/*
+  Discrete preset widths for the priority bars, instead of a computed
+  inline style="width: X%" — priority is a per-row dynamic value, so it
+  can't just move to one static class the way the rest of this file's
+  rules did. sitemap.xsl rounds each priority to the nearest 0.1 and
+  picks the matching class (round(priority * 10) * 10 -> e.g. 0.83 -> 80
+  -> "priority-80"), so this needs one class per 10% step to cover
+  anything a hand-edited <priority> value in sitemap.xml might contain.
+*/
+.priority-0 { width: 0%; }
+.priority-10 { width: 10%; }
+.priority-20 { width: 20%; }
+.priority-30 { width: 30%; }
+.priority-40 { width: 40%; }
+.priority-50 { width: 50%; }
+.priority-60 { width: 60%; }
+.priority-70 { width: 70%; }
+.priority-80 { width: 80%; }
+.priority-90 { width: 90%; }
+.priority-100 { width: 100%; }
