@@ -4,7 +4,7 @@ import { eyebrow } from "../helpers.mjs";
 // stay paired with the TURNSTILE_SECRET_KEY Worker secret: a site key from one
 // widget with the secret from another fails verification even though both
 // values look valid on their own.
-const TURNSTILE_SITE_KEY = "REPLACE_WITH_TURNSTILE_SITE_KEY";
+const TURNSTILE_SITE_KEY = "0x4AAAAAAE0K2IRM_ik-qvB0";
 
 export function contactBody() {
   return `
