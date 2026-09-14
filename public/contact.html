@@ -160,11 +160,16 @@
           <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
         </div>
 
+        <div class="mb-5">
+          <div class="cf-turnstile" data-sitekey="REPLACE_WITH_TURNSTILE_SITE_KEY" data-theme="light"></div>
+        </div>
+
         <button type="submit" class="btn-gold w-full sm:w-auto">Send Message</button>
         <p id="form-status" role="status" aria-live="polite" class="mt-4 text-sm text-ink/70"></p>
       </form>
     </div>
   </section>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="/js/contact-form.js"></script>
   
 </main>

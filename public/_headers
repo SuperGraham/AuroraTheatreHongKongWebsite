@@ -1,5 +1,5 @@
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
@@ -26,6 +26,8 @@
 # loads that fall through to env.ASSETS.fetch()), since those never reach
 # this file's processing at all. Keep both in sync if either changes.
 #
-# No Turnstile on this site (honeypot only), so unlike the skill's baseline
-# template this CSP has no challenges.cloudflare.com allowance in
-# script-src/frame-src — nothing on this site loads a cross-origin script.
+# challenges.cloudflare.com is allowed in script-src (Turnstile's api.js) and
+# frame-src (the widget is an iframe). That's the only cross-origin thing this
+# site loads. Cross-Origin-Embedder-Policy stays 'credentialless' rather than
+# 'require-corp' for the same reason: Turnstile's api.js sends no
+# Cross-Origin-Resource-Policy header, so require-corp blocks it outright.

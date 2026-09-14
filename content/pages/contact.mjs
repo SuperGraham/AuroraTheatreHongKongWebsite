@@ -1,5 +1,11 @@
 import { eyebrow } from "../helpers.mjs";
 
+// Turnstile site key — public, baked straight into the HTML, not secret. Must
+// stay paired with the TURNSTILE_SECRET_KEY Worker secret: a site key from one
+// widget with the secret from another fails verification even though both
+// values look valid on their own.
+const TURNSTILE_SITE_KEY = "REPLACE_WITH_TURNSTILE_SITE_KEY";
+
 export function contactBody() {
   return `
   <section class="bg-ink py-16 text-cream md:py-24">
@@ -68,11 +74,16 @@ export function contactBody() {
           <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
         </div>
 
+        <div class="mb-5">
+          <div class="cf-turnstile" data-sitekey="${TURNSTILE_SITE_KEY}" data-theme="light"></div>
+        </div>
+
         <button type="submit" class="btn-gold w-full sm:w-auto">Send Message</button>
         <p id="form-status" role="status" aria-live="polite" class="mt-4 text-sm text-ink/70"></p>
       </form>
     </div>
   </section>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="/js/contact-form.js"></script>
   `;
 }

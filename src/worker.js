@@ -9,10 +9,14 @@
  * included, so there's no separate plain-text notification to maintain.
  *
  * Required secrets (set via `wrangler secret put <NAME>`):
- *   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION,
- *   SES_FROM_EMAIL, SES_TO_EMAIL
+ *   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, TURNSTILE_SECRET_KEY
  *
- * Spam protection is a honeypot field only (no Turnstile) — see contact.mjs.
+ * Spam protection is honeypot + Cloudflare Turnstile. Turnstile matters here
+ * beyond ordinary spam: this handler takes the recipient address straight from
+ * the submitted payload, so without a real bot check anyone can POST JSON
+ * directly and drive SES into sending mail from this verified domain to any
+ * address they choose. SES bounce/complaint rates are tracked per AWS account,
+ * shared with other projects, so abuse here wouldn't stay contained.
  */
 
 import { REDIRECTS, REDIRECT_PREFIXES } from "./redirects.js";
@@ -48,13 +52,16 @@ const HEADER_IMAGE_URL = "https://www.auroratheatrehk.com/images/photos/2018-01-
 // redirect Cloudflare's "Always Use HTTPS" issues at the edge, which never
 // executes this Worker's code at all.
 //
-// No Turnstile on this site (honeypot only — see handleContact below), so
-// unlike the skill's template baseline this CSP has no
-// challenges.cloudflare.com allowance in script-src/frame-src — nothing on
-// this site loads a cross-origin script or frame.
+// challenges.cloudflare.com is allowed in script-src (Turnstile's api.js) and
+// frame-src (the widget renders in an iframe). Nothing else cross-origin
+// loads on this site. Cross-Origin-Embedder-Policy below is deliberately
+// 'credentialless' rather than 'require-corp' for the same reason: Turnstile's
+// api.js doesn't send a Cross-Origin-Resource-Policy header, so require-corp
+// blocks it outright and silently kills the spam protection.
 const SECURITY_HEADERS = {
   "Content-Security-Policy":
-    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; " +
+    "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; " +
+    "frame-src https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; " +
     "font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; " +
     "frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests",
   "X-Content-Type-Options": "nosniff",
@@ -103,7 +110,7 @@ export default {
 async function handleContact(request, env) {
   try {
     const data = await request.json();
-    const { name, email, phone, interest, message, website } = data;
+    const { name, email, phone, interest, message, website, turnstileToken } = data;
 
     // Honeypot: bots fill every field including hidden ones. Return a fake
     // success so the bot doesn't learn its submission was rejected.
@@ -116,6 +123,20 @@ async function handleContact(request, env) {
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return jsonResponse({ success: false, error: "Please enter a valid email address." }, 400);
+    }
+
+    // Verified before the SES call, never after — this is what stops the
+    // recipient address below being attacker-controlled.
+    if (!turnstileToken) {
+      return jsonResponse({ success: false, error: "Verification failed. Please try again." }, 400);
+    }
+    const verified = await verifyTurnstile(
+      turnstileToken,
+      env.TURNSTILE_SECRET_KEY,
+      request.headers.get("CF-Connecting-IP")
+    );
+    if (!verified) {
+      return jsonResponse({ success: false, error: "Verification failed. Please try again." }, 403);
     }
 
     const payload = {
@@ -150,6 +171,22 @@ async function handleContact(request, env) {
     console.error("Contact form error:", err);
     return jsonResponse({ success: false, error: "Something went wrong. Please try again later." }, 500);
   }
+}
+
+// ---- Turnstile ----
+
+async function verifyTurnstile(token, secretKey, remoteIp) {
+  const body = new FormData();
+  body.append("secret", secretKey);
+  body.append("response", token);
+  if (remoteIp) body.append("remoteip", remoteIp);
+
+  const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    body,
+  });
+  const outcome = await res.json();
+  return outcome.success === true;
 }
 
 // ---- Confirmation email (visitor To, owner CC) ----

@@ -8,6 +8,7 @@
     status.textContent = "Sending…";
 
     const interestField = form.querySelector('input[name="interest"]:checked');
+    const turnstileField = form.querySelector('[name="cf-turnstile-response"]');
 
     const payload = {
       name: form.name.value.trim(),
@@ -16,6 +17,7 @@
       interest: interestField ? interestField.value : "",
       message: form.message.value.trim(),
       website: form.website.value,
+      turnstileToken: turnstileField ? turnstileField.value : "",
     };
 
     try {
@@ -32,8 +34,13 @@
       } else {
         status.textContent = result.error || "Something went wrong. Please try again.";
       }
+      // Turnstile tokens are single-use. Without resetting, a retry after any
+      // failure — or a second message after a success — reuses a spent token
+      // and is rejected every time, which looks like the form is broken.
+      if (window.turnstile) window.turnstile.reset();
     } catch (err) {
       status.textContent = "Network error. Please try again.";
+      if (window.turnstile) window.turnstile.reset();
     }
   });
 })();
