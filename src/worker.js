@@ -20,10 +20,12 @@ import { REDIRECTS, REDIRECT_PREFIXES } from "./redirects.js";
 const SITE_NAME = "Aurora Theatre Hong Kong";
 const WELCOME_MESSAGE =
   "Thanks for getting in touch with Aurora Theatre Hong Kong — we've received your message and will get back to you soon.";
-// Points at the workers.dev URL since auroratheatrehk.com still resolves to
-// the old WordPress site — switch this to https://www.auroratheatrehk.com/...
-// once the real domain is cut over to this Worker.
-const HEADER_IMAGE_URL = "https://aurora-theatre-hk.gocloudconsulting.workers.dev/images/photos/2018-01-the-crucible-1.jpg";
+// Must be a public absolute HTTPS URL — email clients can't load relative
+// paths. Points at the real domain rather than a workers.dev hostname: the
+// contact form can't send at all until SES verifies the domain identity,
+// which only happens once DNS is live on Cloudflare, so by the time any
+// email goes out this URL resolves.
+const HEADER_IMAGE_URL = "https://www.auroratheatrehk.com/images/photos/2018-01-the-crucible-1.jpg";
 
 // ---- Security headers ----
 //
