@@ -60,9 +60,9 @@ const HEADER_IMAGE_URL = "https://www.auroratheatrehk.com/images/photos/2018-01-
 // blocks it outright and silently kills the spam protection.
 const SECURITY_HEADERS = {
   "Content-Security-Policy":
-    "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; " +
+    "default-src 'self'; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com; " +
     "frame-src https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; " +
-    "font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; " +
+    "font-src 'self'; connect-src 'self' https://cloudflareinsights.com; base-uri 'self'; form-action 'self'; " +
     "frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests",
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "DENY",
