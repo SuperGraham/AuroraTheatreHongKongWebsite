@@ -3,6 +3,16 @@ main = "src/worker.js"
 compatibility_date = "2026-07-13"
 compatibility_flags = ["nodejs_compat"]
 account_id = "661d70ec50f4197ddfb3f4db6f848960"
+# Keep the *.workers.dev endpoint alive. Wrangler silently defaults this to
+# false as soon as `routes` exists, which takes the endpoint offline — worth
+# leaving explicit so a future edit to routes can't knock it out again.
+workers_dev = true
+
+# www only — it's the canonical host: SITE_URL, the sitemap and every
+# canonical tag use it, and every URL Google has indexed is www.
+routes = [
+  { pattern = "www.auroratheatrehk.com", custom_domain = true },
+]
 
 [vars]
 SES_TO_EMAIL = "nicolewest1920@gmail.com"
