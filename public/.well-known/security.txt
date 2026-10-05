@@ -1,7 +1,7 @@
 # Security contact information for https://www.auroratheatrehk.com
 # See https://securitytxt.org for more information
 
-Contact: mailto:nicolewest1920@gmail.com
-Expires: 2027-09-14T18:06:43.000Z
+Contact: mailto:security@gocloud.consulting
+Expires: 2027-10-05T19:59:42.000Z
 Canonical: https://www.auroratheatrehk.com/.well-known/security.txt
 Preferred-Languages: en
