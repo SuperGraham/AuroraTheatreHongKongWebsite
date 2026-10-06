@@ -1,7 +1,7 @@
 # Security contact information for https://www.auroratheatrehk.com
 # See https://securitytxt.org for more information
 
-Contact: mailto:security@gocloud.consulting
-Expires: 2027-10-05T19:59:42.000Z
+Contact: https://gocloud.consulting/securitycontact
+Expires: 2027-10-06T06:33:08.000Z
 Canonical: https://www.auroratheatrehk.com/.well-known/security.txt
 Preferred-Languages: en
