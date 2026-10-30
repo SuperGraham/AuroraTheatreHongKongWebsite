@@ -29,22 +29,9 @@ const WELCOME_MESSAGE =
 // contact form can't send at all until SES verifies the domain identity,
 // which only happens once DNS is live on Cloudflare, so by the time any
 // email goes out this URL resolves.
-const HEADER_IMAGE_URL = "https://www.auroratheatrehk.com/email-assets/email-header.jpg";
-
-// Assets that have to be fetchable from other origins. A mail client renders
-// the confirmation email on its own origin — Outlook on the web does it on a
-// Microsoft origin — so loading the header image is a cross-origin no-cors
-// fetch, which the site-wide `Cross-Origin-Resource-Policy: same-origin`
-// forbids outright. The recipient just sees a broken image and the alt text.
-//
-// Neither obvious culprit is to blame, which is what makes it hard to spot:
-// this site's CSP only governs pages a browser loads FROM this site and has
-// no say over a mail client, and the file is fine — curl returns 200 all
-// along, because curl isn't a browser and never enforces CORP.
-//
-// Kept to this one directory rather than all of /images/ so the galleries,
-// which are the bulk of requests here, still never execute the Worker.
-const CROSS_ORIGIN_ASSET_PREFIXES = ["/email-assets/"];
+// Must stay in step with the CORP detach block in public/_headers — if this
+// filename changes, that block's path changes with it.
+const HEADER_IMAGE_URL = "https://www.auroratheatrehk.com/images/email-header.jpg";
 
 // ---- Security headers ----
 //
@@ -91,16 +78,10 @@ const SECURITY_HEADERS = {
   "Origin-Agent-Cluster": "?1",
 };
 
-function withSecurityHeaders(response, pathname) {
+function withSecurityHeaders(response) {
   const newResponse = new Response(response.body, response);
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
     newResponse.headers.set(name, value);
-  }
-  // set(), not append() — this replaces the same-origin value above rather
-  // than adding a second, conflicting header, which is exactly what a
-  // _headers block would have done.
-  if (pathname && CROSS_ORIGIN_ASSET_PREFIXES.some((p) => pathname.startsWith(p))) {
-    newResponse.headers.set("Cross-Origin-Resource-Policy", "cross-origin");
   }
   return newResponse;
 }
@@ -112,19 +93,19 @@ export default {
     if (request.method === "GET" || request.method === "HEAD") {
       const target = REDIRECTS[url.pathname];
       if (target) {
-        return withSecurityHeaders(Response.redirect(new URL(target + url.search, url).toString(), 301), url.pathname);
+        return withSecurityHeaders(Response.redirect(new URL(target + url.search, url).toString(), 301));
       }
       const prefixMatch = REDIRECT_PREFIXES.find(([prefix]) => url.pathname.startsWith(prefix));
       if (prefixMatch) {
-        return withSecurityHeaders(Response.redirect(new URL(prefixMatch[1], url).toString(), 301), url.pathname);
+        return withSecurityHeaders(Response.redirect(new URL(prefixMatch[1], url).toString(), 301));
       }
     }
 
     if (url.pathname === "/contact" && request.method === "POST") {
-      return withSecurityHeaders(await handleContact(request, env), url.pathname);
+      return withSecurityHeaders(await handleContact(request, env));
     }
 
-    return withSecurityHeaders(await env.ASSETS.fetch(request), url.pathname);
+    return withSecurityHeaders(await env.ASSETS.fetch(request));
   },
 };
 

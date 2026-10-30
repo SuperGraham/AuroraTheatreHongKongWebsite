@@ -32,18 +32,20 @@
 # 'require-corp' for the same reason: Turnstile's api.js sends no
 # Cross-Origin-Resource-Policy header, so require-corp blocks it outright.
 
-# The confirmation email's header image needs CORP: cross-origin (a mail
-# client renders the message on its own origin, so fetching the image is a
-# cross-origin no-cors load that same-origin forbids — the recipient sees a
-# broken image). That override is NOT done here, deliberately.
+# Email images need a CORP exception. Webmail renders the message on its own
+# domain, so the email's <img> is a cross-origin load and the /* block's
+# `same-origin` makes the browser refuse it — the reader sees a broken-image
+# icon and the alt text. The page works and the URL returns 200, so this
+# survives every test except opening the real email in webmail.
 #
-# A more specific block in this file does not replace a header from /* — it
-# ADDS a second one. Confirmed with wrangler dev: /images/* came back with
-# both `cross-origin-resource-policy: same-origin` and `: cross-origin`.
-# Conflicting duplicates are worse than the original bug.
+# The `!` detach line is required: Cloudflare joins a header set by two
+# matching blocks into one comma-separated value rather than letting the
+# later block win, so without it the response carries
+# `same-origin, cross-origin`, which browsers treat as invalid.
 #
-# So the override lives in src/worker.js, which sets headers rather than
-# appending them, and /email-assets/* is in wrangler.toml's run_worker_first
-# so those requests actually reach it. Keeping it to that one directory means
-# the gallery images — by far the most requested things on this site — still
-# bypass the Worker entirely.
+# The path must match HEADER_IMAGE_URL in src/worker.js — change both
+# together. Only images actually used in emails get this; no wildcard, and
+# everything else on the site stays same-origin.
+/images/email-header.jpg
+  ! Cross-Origin-Resource-Policy
+  Cross-Origin-Resource-Policy: cross-origin

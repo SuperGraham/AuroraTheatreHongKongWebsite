@@ -97,9 +97,4 @@ run_worker_first = [
   "/playbit_band/*",
   "/playbit_event/*",
   "/old/*",
-  # Not a redirect — this one is here so the Worker can override
-  # Cross-Origin-Resource-Policy for the confirmation email's header image.
-  # A _headers block can't do it: a more specific block adds a second,
-  # conflicting header rather than replacing the one from /*.
-  "/email-assets/*",
 ]
