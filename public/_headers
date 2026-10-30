@@ -49,3 +49,62 @@
 /images/email-header.jpg
   ! Cross-Origin-Resource-Policy
   Cross-Origin-Resource-Policy: cross-origin
+
+# Early Hints. Cloudflare's toggle only replays Link headers it finds on real
+# responses — it generates nothing itself — so without these the feature is a
+# no-op for all 58 pages. Never put the Link in the /* block: it would then
+# ride on style.css, images and robots.txt too, and any of those fetched
+# directly reports an unused preload in Chrome.
+#
+# Everything between the markers is rewritten by
+# scripts/generate-early-hints.js on every build. Edit the script, not the
+# generated lines, and keep both markers — the script exits with an error if
+# they are missing, and it leaves every other block in this file alone.
+# BEGIN generated early-hints
+# Written by scripts/generate-early-hints.js on every build — edit the script, not these lines.
+/about
+  Link: </css/style.css>; rel=preload; as=style
+
+/blog/*
+  Link: </css/style.css>; rel=preload; as=style
+
+/classes-and-workshops
+  Link: </css/style.css>; rel=preload; as=style
+
+/coaching
+  Link: </css/style.css>; rel=preload; as=style
+
+/contact
+  Link: </css/style.css>; rel=preload; as=style
+
+/current-productions
+  Link: </css/style.css>; rel=preload; as=style
+
+/gallery/*
+  Link: </css/style.css>; rel=preload; as=style
+
+/gallery
+  Link: </css/style.css>; rel=preload; as=style
+
+/
+  Link: </css/style.css>; rel=preload; as=style
+
+/past-productions
+  Link: </css/style.css>; rel=preload; as=style
+
+/privacy-policy
+  Link: </css/style.css>; rel=preload; as=style
+
+/services/*
+  Link: </css/style.css>; rel=preload; as=style
+
+/services
+  Link: </css/style.css>; rel=preload; as=style
+
+/sponsors
+  Link: </css/style.css>; rel=preload; as=style
+
+/testimonials
+  Link: </css/style.css>; rel=preload; as=style
+
+# END generated early-hints
