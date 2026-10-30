@@ -74,8 +74,13 @@ export function contactBody() {
           <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
         </div>
 
+        <!-- The callbacks are what make the token's age knowable — a hidden
+             input's value changes fire no events. See js/turnstile.js. -->
         <div class="mb-5">
-          <div class="cf-turnstile" data-sitekey="${TURNSTILE_SITE_KEY}" data-theme="light"></div>
+          <div class="cf-turnstile" data-sitekey="${TURNSTILE_SITE_KEY}" data-theme="light"
+            data-callback="onTurnstileSolved"
+            data-expired-callback="onTurnstileExpired"
+            data-error-callback="onTurnstileError"></div>
         </div>
 
         <button type="submit" class="btn-gold w-full sm:w-auto">Send Message</button>
@@ -83,6 +88,11 @@ export function contactBody() {
       </form>
     </div>
   </section>
+  <!-- turnstile.js must come FIRST and stay synchronous: it defines the
+       globals the data-callback attributes above name, and auto-rendering
+       looks them up when api.js runs. Get the order wrong and it fails
+       silently — the widget renders but no callback ever fires. -->
+  <script src="/js/turnstile.js"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="/js/contact-form.js"></script>
   `;

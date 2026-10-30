@@ -31,3 +31,19 @@
 # site loads. Cross-Origin-Embedder-Policy stays 'credentialless' rather than
 # 'require-corp' for the same reason: Turnstile's api.js sends no
 # Cross-Origin-Resource-Policy header, so require-corp blocks it outright.
+
+# The confirmation email's header image needs CORP: cross-origin (a mail
+# client renders the message on its own origin, so fetching the image is a
+# cross-origin no-cors load that same-origin forbids — the recipient sees a
+# broken image). That override is NOT done here, deliberately.
+#
+# A more specific block in this file does not replace a header from /* — it
+# ADDS a second one. Confirmed with wrangler dev: /images/* came back with
+# both `cross-origin-resource-policy: same-origin` and `: cross-origin`.
+# Conflicting duplicates are worse than the original bug.
+#
+# So the override lives in src/worker.js, which sets headers rather than
+# appending them, and /email-assets/* is in wrangler.toml's run_worker_first
+# so those requests actually reach it. Keeping it to that one directory means
+# the gallery images — by far the most requested things on this site — still
+# bypass the Worker entirely.
