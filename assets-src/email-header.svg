@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  assets-src/email-header.svg — the overlay for public/images/email-header.jpg,
+  the header banner in the contact form's confirmation email.
+
+  1200x300, which is 2x the 600px width the email template renders it at, so
+  it stays sharp on retina displays. Rebuild with:
+
+    rsvg-convert -w 1200 -h 300 assets-src/email-header.svg -o /tmp/overlay.png
+    magick public/images/photos/2022-12-6fc5722e-5eac-4efb-bf5e-b4e9b7de7230.jpg \
+      -resize 1200x -crop 1200x300+0+55 +repage -modulate 94 \
+      /tmp/overlay.png -composite \
+      public/images/logo-white.png -gravity west -geometry +72-6 -composite \
+      -quality 88 public/images/email-header.jpg
+
+  Unlike gocloud's, this banner is a PHOTOGRAPH with an overlay on top, not a
+  flat panel — it is a theatre, and the site leads with production imagery
+  everywhere else. The source is the Open Couple stage shot, the widest real
+  production photo in the library (1600x900); the Crucible photo the banner
+  used before is only 794px wide, so it could not reach 1200 without being
+  upscaled into mush.
+
+  Deliberately carries NO text of its own. public/images/logo-white.png
+  already holds the wordmark in the correct face — Playfair Display is not
+  installed locally, so any text rendered here would sit in a substitute face
+  right beside the real one.
+
+  Colours are the brand tokens from css/input.css, not approximations:
+  ink #15100c, gold #e3a13a.
+
+  IMPORTANT: the output filename is load-bearing. public/_headers has a
+  path-specific `! Cross-Origin-Resource-Policy` block for
+  /images/email-header.jpg without which the image is refused by webmail.
+  Change the extension and you must change that block and HEADER_IMAGE_URL in
+  src/worker.js together.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300">
+  <defs>
+    <!-- Scrim so the white wordmark always has solid ground under it,
+         whatever the photo is doing behind. Fades out by just past halfway
+         so the right-hand side of the scene stays legible. -->
+    <linearGradient id="scrim" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#15100c" stop-opacity="0.94"/>
+      <stop offset="0.38" stop-color="#15100c" stop-opacity="0.78"/>
+      <stop offset="0.62" stop-color="#15100c" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#15100c" stop-opacity="0.05"/>
+    </linearGradient>
+
+    <!-- Settles the top and bottom edges into the dark so the crop does not
+         end on a hard line against the white email card. -->
+    <linearGradient id="edges" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#15100c" stop-opacity="0.45"/>
+      <stop offset="0.3" stop-color="#15100c" stop-opacity="0"/>
+      <stop offset="0.75" stop-color="#15100c" stop-opacity="0"/>
+      <stop offset="1" stop-color="#15100c" stop-opacity="0.55"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="300" fill="url(#scrim)"/>
+  <rect width="1200" height="300" fill="url(#edges)"/>
+
+  <!-- The gold accent the site uses to close off dark sections, at 2x. -->
+  <rect x="0" y="292" width="1200" height="8" fill="#e3a13a"/>
+</svg>
