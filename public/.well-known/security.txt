@@ -2,6 +2,6 @@
 # See https://securitytxt.org for more information
 
 Contact: https://gocloud.consulting/securitycontact
-Expires: 2027-10-30T13:34:57.000Z
+Expires: 2027-10-30T13:56:42.000Z
 Canonical: https://www.auroratheatrehk.com/.well-known/security.txt
 Preferred-Languages: en
