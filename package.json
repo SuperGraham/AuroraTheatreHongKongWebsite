@@ -8,7 +8,8 @@
     "build:sitemap": "SITE_URL=https://www.auroratheatrehk.com node scripts/generate-sitemap.js ./public",
     "build:early-hints": "node scripts/generate-early-hints.js ./public",
     "build:security-txt": "SITE_URL=https://www.auroratheatrehk.com SECURITY_CONTACT=https://gocloud.consulting/securitycontact node scripts/generate-security-txt.js ./public",
-    "build": "npm run build:pages && npm run build:blog && npm run build:css && npm run build:sitemap && npm run build:early-hints && npm run build:security-txt",
+    "build:image-check": "node scripts/check-image-sizes.js ./public",
+    "build": "npm run build:pages && npm run build:blog && npm run build:css && npm run build:sitemap && npm run build:early-hints && npm run build:security-txt && npm run build:image-check",
     "dev": "tailwindcss -i ./css/input.css -o ./public/css/style.css --watch"
   },
   "devDependencies": {
