@@ -1,0 +1,10 @@
+# Never upload these to Workers Static Assets. Wrangler deploys the files on
+# disk, not what git tracks, so a gitignored file in public/ still goes live:
+# macOS Finder wrote public/.DS_Store and it was served at /.DS_Store
+# (2026-11-24). Same syntax as .gitignore; matches at any depth.
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+*.swp
+*~
