@@ -77,9 +77,9 @@ const AI_TRAINING_CRAWLERS = [
   'KimiBot', 'CitibotSiteCrawler',
 ];
 
-// Site-specific paths no crawler should fetch; added to the first group.
-// Never list a page that carries a noindex tag (a crawler that cannot fetch
-// the page cannot read the tag).
+// Site-specific paths no crawler should fetch (for example '/admin/'); added
+// to the first group. Empty by default. Never list a page that carries a
+// noindex tag (a crawler that cannot fetch the page cannot read the tag).
 const DISALLOW_PATHS = [];
 
 function buildRobotsTxt() {
@@ -89,7 +89,8 @@ function buildRobotsTxt() {
   // Group 2: refuses known AI-training crawlers by name, because few crawlers
   // read Content-Signal yet. Several User-agent lines over one Disallow is
   // valid robots.txt (RFC 9309).
-  // Do not also enable Cloudflare's managed robots.txt (Bot Preference Sync).
+  // The matching Cloudflare setting is Training: Disallow, never Block
+  // (SKILL.md sections 3 and 6).
   const disallow = DISALLOW_PATHS.map((p) => `Disallow: ${p}\n`).join('');
   const crawlers = AI_TRAINING_CRAWLERS.map((ua) => `User-agent: ${ua}\n`).join('');
   return `User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n${disallow}\n${crawlers}Disallow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
