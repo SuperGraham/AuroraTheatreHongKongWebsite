@@ -25,7 +25,7 @@ export function privacyBody() {
       <p class="text-ink/80">When you submit our contact form, we collect the name, email address, optional phone number and message you provide. That information is sent by email to Aurora Theatre so we can respond to your enquiry, and you'll receive an automatic confirmation email acknowledging receipt. We don't add you to any mailing list or share this information with third parties, other than the email delivery provider we use to send it.</p>
 
       <h2 class="mt-8 font-display text-xl font-bold text-ink">Cookies & Tracking</h2>
-      <p class="text-ink/80">This website does not use tracking cookies, analytics scripts or advertising networks. It is a static website with no visitor accounts, comments or logins.</p>
+      <p class="text-ink/80">This website does not use tracking cookies or advertising networks. Cloudflare Web Analytics measures page-load speed and counts visits without cookies and without identifying you. It is a static website with no visitor accounts, comments or logins.</p>
 
       <h2 class="mt-8 font-display text-xl font-bold text-ink">Hosting</h2>
       <p class="text-ink/80">This site is hosted on Cloudflare's global network. Standard web server logs (such as IP address, browser type and request time) may be retained briefly by our hosting provider for security and reliability purposes.</p>
